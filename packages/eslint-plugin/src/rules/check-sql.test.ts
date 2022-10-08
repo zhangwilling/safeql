@@ -88,6 +88,108 @@ RuleTester.describe("check-sql", () => {
 
   ruleTester.run("base", rules["check-sql"], {
     valid: [
+    //   {
+    //     name: "select column from table",
+    //     filename,
+    //     options: withConnection(connections.base),
+    //     code: "const result = conn.query<{ id: number; }>(sql`select id from caregiver`);",
+    //   },
+    //   {
+    //     name: "select * from table",
+    //     filename,
+    //     options: withConnection(connections.base),
+    //     code: `
+    //           const result = conn.query<{ id: number; first_name: string; middle_name: Nullable<string>; last_name: string; }>(sql\`
+    //               select * from caregiver
+    //           \`);
+    //       `,
+    //   },
+    //   {
+    //     name: "select from table with left join",
+    //     filename,
+    //     options: withConnection(connections.base),
+    //     code: `
+    //         const result = conn.query<{ caregiver_id: number; agency_id: Nullable<number>; }>(sql\`
+    //             select
+    //                 caregiver.id as caregiver_id,
+    //                 agency.id as agency_id
+    //             from caregiver
+    //                 left join caregiver_agency on caregiver.id = caregiver_agency.caregiver_id
+    //                 left join agency on agency.id = caregiver_agency.agency_id
+    //         \`);
+    //     `,
+    //   },
+    //   {
+    //     name: "select from table where int column equals to ts number arg",
+    //     filename,
+    //     options: withConnection(connections.base),
+    //     code: `
+    //         function run(id: number) {
+    //             const result = conn.query<{ name: string }>(sql\`
+    //                 select name from agency where id = \${id}
+    //             \`);
+    //         }
+    //     `,
+    //   },
+    //   {
+    //     name: "select from table where int column in an array of ts arg",
+    //     filename,
+    //     options: withConnection(connections.base),
+    //     code: `
+    //         function run(ids: number[]) {
+    //             const result = conn.query<{ name: string }>(sql\`
+    //                 select name from agency where id = ANY(\${ids})
+    //             \`);
+    //         }
+    //     `,
+    //   },
+      {
+        name: "select statement with conditional expression",
+        filename,
+        options: withConnection(connections.base),
+        code: `
+            function run(flag: boolean) {
+                const result = conn.query<{ name: string }>(sql\`
+                    select name from agency where id = \${flag ? 1 : 2}
+                \`);
+            }
+        `,
+      },
+    //   {
+    //     name: "select statement with type reference",
+    //     filename,
+    //     options: withConnection(connections.base),
+    //     code: `
+    //         type Agency = { name: string };
+    //         function run() {
+    //             const result = conn.query<Agency>(sql\`
+    //                 select name from agency
+    //             \`);
+    //         }
+    //     `,
+    //   },
+
+    //   {
+    //     name: "select statement with interface",
+    //     filename,
+    //     options: withConnection(connections.base),
+    //     code: `
+    //         interface Agency { name: string }
+    //         function run() {
+    //             const result = conn.query<Agency>(sql\`
+    //                 select name from agency
+    //             \`);
+    //         }
+    //     `,
+    //   },
+    ],
+    invalid: [],
+  });
+
+  return;
+
+  ruleTester.run("base", rules["check-sql"], {
+    valid: [
       {
         name: "select non-table column",
         filename,

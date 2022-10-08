@@ -1,11 +1,20 @@
 {
     "configurations": [
-    {
-        "command": "pnpm demo",
-        "name": "run demo",
-        "request": "launch",
-        "type": "node-terminal",
-        "cwd": "${workspaceFolder}/demo"
-    }
+        {
+            "name": "plugin_test",
+            "port": 9229,
+            "request": "attach",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "command": "pnpm demo",
+            "name": "run demo",
+            "request": "launch",
+            "type": "node-terminal",
+            "cwd": "${workspaceFolder}/demo"
+        }
     ]
 }

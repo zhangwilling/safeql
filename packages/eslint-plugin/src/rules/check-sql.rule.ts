@@ -232,7 +232,10 @@ function checkConnection(params: {
 const pgParseQueryE = (query: string) => {
   return pipe(
     E.tryCatch(
-      () => pgParser.parseQuerySync(query),
+      () => { 
+        const res = pgParser.parseQuerySync(query)
+        return res
+      },
       (error) => PostgresError.to(query, error)
     )
   );
@@ -259,9 +262,9 @@ function reportCheck(params: {
     E.Do,
     E.bind("parser", () => E.of(ESLintUtils.getParserServices(context))),
     E.bind("checker", ({ parser }) => E.of(parser.program.getTypeChecker())),
-    E.bind("query", ({ parser, checker }) =>
-      mapTemplateLiteralToQueryText(tag.quasi, parser, checker)
-    ),
+    E.bind("query", ({ parser, checker }) => {
+      return mapTemplateLiteralToQueryText(tag.quasi, parser, checker)
+    }),
     E.bindW("pgParsed", ({ query }) => pgParseQueryE(query)),
     E.bindW("result", ({ query, pgParsed }) =>
       generateSyncE({ query, pgParsed, connection, projectDir })
@@ -363,6 +366,7 @@ function checkConnectionByCallExpression(params: {
   projectDir: string;
 }) {
   const { context, tag, projectDir, connection } = params;
+  console.log("🚀 ~ file: check-sql.rule.ts ~ line 366 ~ context, tag, projectDir, connection", context, tag, projectDir, connection)
 
   if (
     isTagMemberValid(tag) &&
@@ -431,6 +435,8 @@ const createRule = ESLintUtils.RuleCreator(() => `https://github.com/ts-safeql/s
   RuleOptions,
   RuleMessage
 >;
+
+console.log("🚀 ~ file: check-sql.rule.ts ~ line 448 ~ RuleOptions", RuleOptions)
 
 export default createRule({
   name: "check-sql",
